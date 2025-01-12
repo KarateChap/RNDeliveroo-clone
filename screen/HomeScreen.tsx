@@ -10,6 +10,7 @@ import {
   Platform,
   TextInput,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import {
   AdjustmentsVerticalIcon,
@@ -51,12 +52,12 @@ const HomeScreen = () => {
   const isIOS = Platform.OS === "ios" ? true : false;
 
   return (
-    <View className="bg-white pt-5">
+    <SafeAreaView className="bg-white pt-5">
       {/* Header */}
       <View className="flex-row pb-3 items-center mx-4 gap-2">
         <Image
           source={{
-            uri: "https://links.papareact.com/wru",
+            uri: "https://cdn-icons-png.flaticon.com/512/1535/1535791.png",
           }}
           className="h-7 w-7 bg-gray-300 rounded-full"
         />
@@ -67,12 +68,12 @@ const HomeScreen = () => {
           <View className="flex-row gap-2 ">
             <Text className="font-bold text-xl">Current Location</Text>
             <View className="pt-1">
-              <ChevronDownIcon size={20} color="#00CCBB" />
+              <ChevronDownIcon size={20} color="#F5585C" />
             </View>
           </View>
         </View>
 
-        <UserIcon size={35} color="#00CCBB" />
+        <UserIcon size={35} color="#F5585C" />
       </View>
       {/* Search */}
       <View className="flex-row items-center gap-2 pb-2 px-4">
@@ -87,7 +88,7 @@ const HomeScreen = () => {
           <TextInput placeholder="Restaurants and cuisines" />
         </View>
 
-        <AdjustmentsVerticalIcon color="#00CCBB" />
+        <AdjustmentsVerticalIcon color="#F5585C" />
       </View>
 
       {/* Body */}
@@ -111,7 +112,7 @@ const HomeScreen = () => {
           />
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 export default HomeScreen;
