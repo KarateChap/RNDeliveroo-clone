@@ -1,7 +1,8 @@
 import Categories from "@/components/Categories";
 import FeaturedRow from "@/components/FeaturedRow";
 import { useNavigation } from "@react-navigation/native";
-import { useLayoutEffect } from "react";
+import sanityClient from "../sanity";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,7 +10,6 @@ import {
   Platform,
   TextInput,
   ScrollView,
-  PixelRatio,
 } from "react-native";
 import {
   AdjustmentsVerticalIcon,
@@ -19,14 +19,33 @@ import {
 } from "react-native-heroicons/outline";
 
 const HomeScreen = () => {
-  const scale = PixelRatio.get();
-
   const navigation = useNavigation();
+  const [featuredCategories, setFeaturedCategories] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
+  }, []);
+
+  useEffect(() => {
+    sanityClient
+      .fetch(
+        `
+      *[_type == "featured"]{
+      ...,
+      restaurants[]-> {
+        ...,
+        dishes[]->,
+          type-> {
+            name
+          }
+        }
+      }`
+      )
+      .then((data) => {
+        setFeaturedCategories(data);
+      });
   }, []);
 
   const isIOS = Platform.OS === "ios" ? true : false;
@@ -82,25 +101,15 @@ const HomeScreen = () => {
         <Categories />
 
         {/* Featured */}
-        <FeaturedRow
-          id="123"
-          title="Featured"
-          description="Paid placements from our partners"
-        />
 
-        {/* Tasty Discounts */}
-        <FeaturedRow
-          id="1234"
-          title="Featured"
-          description="Paid placements from our partners"
-        />
-
-        {/* Offers near you */}
-        <FeaturedRow
-          id="12345"
-          title="Featured"
-          description="Paid placements from our partners"
-        />
+        {featuredCategories?.map((category: any) => (
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
       </ScrollView>
     </View>
   );
